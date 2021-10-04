@@ -1,0 +1,372 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ui_practice/models/fake_response.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:expandable_text/expandable_text.dart';
+
+class MovieDetailsScreen extends StatefulWidget {
+  final int index;
+  const MovieDetailsScreen(this.index, {Key? key}) : super(key: key);
+
+  @override
+  _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Hero(
+                        tag:
+                            "movie${ResponseData.elementAt(widget.index).name}",
+                        child: Image.network(
+                          ResponseData.elementAt(widget.index).imageUrl,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.16,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Theme.of(context).backgroundColor,
+                                blurRadius: 100.0,
+                                spreadRadius: 20),
+                          ],
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context)
+                                  .backgroundColor
+                                  .withOpacity(0.001),
+                              Theme.of(context).backgroundColor
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          )),
+                    ),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Theme.of(context).buttonColor),
+                              child: Icon(
+                                Icons.play_arrow_rounded,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "${ResponseData.elementAt(widget.index).name}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .fontFamily,
+                                  fontSize: 25),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "2021 | Action, Crime, Drama",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .fontFamily,
+                                  fontSize: 15),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            RatingBar.builder(
+                              initialRating: 3,
+                              minRating: 1,
+                              itemSize: 25,
+                              unratedColor: Theme.of(context).accentColor,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              ignoreGestures: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Theme.of(context).buttonColor,
+                                      blurRadius: 10,
+                                      offset: Offset(1, 2),
+                                    ),
+                                  ],
+                                  color: Theme.of(context).buttonColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: MaterialButton(
+                                elevation: 0,
+                                onPressed: () {},
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      "assets/icons/ic_download.png",
+                                      width: 20,
+                                      height: 20,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Download",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+
+                  //back button
+                  getHeaderBack()
+                ],
+              ),
+            ),
+            getEpisodes(),
+            getPlot()
+          ],
+        ));
+  }
+
+  Widget getHeaderBack() {
+    return Positioned(
+      top: 40,
+      left: 20,
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.all(10),
+                child: Image.asset(
+                  "assets/icons/ic_back.png",
+                  width: 25,
+                  height: 25,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color:
+                            Theme.of(context).backgroundColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    child: Image.asset(
+                      "assets/icons/ic_heart.png",
+                      width: 25,
+                      height: 25,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color:
+                            Theme.of(context).backgroundColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    child: Image.asset(
+                      "assets/icons/ic_share.png",
+                      width: 25,
+                      height: 25,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getPlot() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Plot",
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          ExpandableText(
+            "Rakesh Kadam is an honest police officer who ends up committing suicide due to the false accusations of corruption levelled against him by Jaikant Shikre, a crime boss and politician in Goa running various rackets like kidnapping, extortion and smuggling. Kadam's wife Megha vows revenge against Jaikant in front of him, exclaiming that God will dispense justice to him for this act.",
+            expandText: 'show more',
+            collapseText: 'show less',
+            maxLines: 3,
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
+            linkColor: Colors.white,
+          )
+        ],
+      ),
+    );
+  }
+
+  getEpisodes() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "Episodes",
+              style: TextStyle(color: Colors.white, fontSize: 25),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.25,
+            child: ListView.builder(
+                shrinkWrap: false,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                scrollDirection: Axis.horizontal,
+                itemCount: ResponseData.length,
+                itemBuilder: (context, index) {
+                  Response res = ResponseData.elementAt(index);
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            res.imageUrl,
+                            height: 200,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Theme.of(context).backgroundColor,
+                                      blurRadius: 100.0,
+                                      spreadRadius: 20),
+                                ],
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context)
+                                        .backgroundColor
+                                        .withOpacity(0.001),
+                                    Theme.of(context).backgroundColor
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                )),
+                          ),
+                        ),
+                        Positioned(
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            bottom: 10,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Episode - 1",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                                Text("Rice of sun ",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.7),
+                                        fontSize: 13)),
+                              ],
+                            ))
+                      ],
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}

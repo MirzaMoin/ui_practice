@@ -27,12 +27,18 @@ class _MainScreenState extends State<MainScreen> {
       body: screenArray[_selectedBottomIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        selectedItemColor:
+            Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+        unselectedItemColor: Theme.of(context)
+            .bottomNavigationBarTheme
+            .unselectedIconTheme!
+            .color,
         backgroundColor:
             Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         currentIndex: _selectedBottomIndex,
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
         onTap: (index) {
           setState(() {
             _selectedBottomIndex = index;
@@ -40,25 +46,26 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: [
           BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/icons/ic_home.png",
-                width: 20,
-                height: 20,
-                color: Theme.of(context)
-                    .bottomNavigationBarTheme
-                    .unselectedIconTheme!
-                    .color,
-              ),
-              activeIcon: Image.asset(
-                "assets/icons/ic_home_fill.png",
-                width: 20,
-                height: 20,
-                color: Theme.of(context)
-                    .bottomNavigationBarTheme
-                    .selectedIconTheme!
-                    .color,
-              ),
-              label: "Home"),
+            icon: Image.asset(
+              "assets/icons/ic_home.png",
+              width: 20,
+              height: 20,
+              color: Theme.of(context)
+                  .bottomNavigationBarTheme
+                  .unselectedIconTheme!
+                  .color,
+            ),
+            activeIcon: Image.asset(
+              "assets/icons/ic_home_fill.png",
+              width: 20,
+              height: 20,
+              color: Theme.of(context)
+                  .bottomNavigationBarTheme
+                  .selectedIconTheme!
+                  .color,
+            ),
+            label: "Home",
+          ),
           BottomNavigationBarItem(
               icon: Image.asset(
                 "assets/icons/ic_search.png",
