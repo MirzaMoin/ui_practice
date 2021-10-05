@@ -23,24 +23,35 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     headerPageController = new PageController(initialPage: 0);
     Timer.periodic(Duration(seconds: 4), (timer) {
-      headerPageController.nextPage(
-          duration: Duration(seconds: 1), curve: Curves.easeIn);
-      if (headerPageController.page == ResponseData.length - 1) {
-        headerPageController.animateToPage(0,
+      if (headerPageController.hasClients) {
+        headerPageController.nextPage(
             duration: Duration(seconds: 1), curve: Curves.easeIn);
+        if (headerPageController.page == ResponseData.length - 1) {
+          headerPageController.animateToPage(0,
+              duration: Duration(seconds: 1), curve: Curves.easeIn);
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: ListView(
-        shrinkWrap: false,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.zero,
-        children: [getHeader(), getContent()],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          child: ListView.builder(
+              shrinkWrap: false,
+              itemCount: 4,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                return index == 0 ? getHeader() : getContent();
+              }),
+        ),
       ),
     );
   }
@@ -216,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget getContent() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -247,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
               height: MediaQuery.of(context).size.height * 0.25,
-              margin: EdgeInsets.symmetric(vertical: 10),
+              margin: EdgeInsets.only(top: 10),
               child: ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   physics: BouncingScrollPhysics(),
@@ -263,63 +274,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (context) =>
                                     MovieDetailsScreen(index)));
                       },
-                      child: Hero(
-                        tag: "movie${ResponseData.elementAt(index).name}",
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          child: SingleChildScrollView(
-                            child: Material(
-                              color: Colors.transparent,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                        ResponseData.elementAt(index).imageUrl,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.28,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.18,
-                                        fit: BoxFit.fill,
-                                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        child: SingleChildScrollView(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.network(
+                                      ResponseData.elementAt(index).imageUrl,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.18,
+                                      fit: BoxFit.fill,
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.only(top: 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${ResponseData.elementAt(index).name}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1!
-                                                  .fontFamily),
-                                        ),
-                                        Text(
-                                          "2020",
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              fontFamily: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1!
-                                                  .fontFamily),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${ResponseData.elementAt(index).name}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .headline1!
+                                                .fontFamily),
+                                      ),
+                                      Text(
+                                        "2020",
+                                        style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .headline1!
+                                                .fontFamily),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
