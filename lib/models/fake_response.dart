@@ -5,6 +5,27 @@ class Response {
   Response(this.name, this.imageUrl);
 }
 
+class Categories {
+  String name;
+  String icon;
+
+  Categories(this.name, this.icon);
+}
+
+final CategoriesList = [
+  Categories("Horror", "😱"),
+  Categories("Romantic", "🥰"),
+  Categories("Comedy", "😜"),
+  Categories("Drama", "🤩"),
+  Categories("Action", "😎"),
+  Categories("Adventure", "🤓"),
+  Categories("Biography", "⛹️‍♂️"),
+  Categories("Crime", "🔪"),
+  Categories("Family", "👨‍👩‍👧‍👦"),
+  Categories("Thriller", "😲"),
+  Categories("Sci-Fi", "👽"),
+  Categories("Sport", "🏋️‍♀️"),
+];
 final ResponseData = [
   Response("GOLD",
       "https://static.tvmaze.com/uploads/images/original_untouched/84/211238.jpg"),

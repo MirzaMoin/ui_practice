@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ui_practice/screens/download_screen.dart';
 import 'package:ui_practice/screens/favorite_screen.dart';
 import 'package:ui_practice/screens/home_screen.dart';
+import 'package:ui_practice/screens/search_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final screenArray = [
     HomeScreen(),
-    HomeScreen(),
+    SearchScreen(),
     FavoriteScreen(),
     DownloadScreen(),
   ];

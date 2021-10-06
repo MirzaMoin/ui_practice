@@ -49,7 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
-                return index == 0 ? getHeader() : getContent();
+                return index == 0
+                    ? getHeader()
+                    : index == 1
+                        ? getCategories()
+                        : getContent();
               }),
         ),
       ),
@@ -227,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget getContent() {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -327,6 +331,106 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 )
                               ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  })),
+        ],
+      ),
+    );
+  }
+
+  Widget getCategories() {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Text(
+                    "Categories",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily:
+                            Theme.of(context).textTheme.headline1!.fontFamily),
+                  ),
+                ),
+                Text(
+                  "See more",
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 12,
+                      fontFamily:
+                          Theme.of(context).textTheme.headline1!.fontFamily),
+                ),
+              ],
+            ),
+          ),
+          Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              margin: EdgeInsets.only(top: 10),
+              child: ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: false,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: CategoriesList.length,
+                  itemBuilder: (context, index) {
+                    Categories category = CategoriesList.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MovieDetailsScreen(index)));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        child: SingleChildScrollView(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).accentColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("${category.icon}"),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${category.name}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1!
+                                                  .fontFamily),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),

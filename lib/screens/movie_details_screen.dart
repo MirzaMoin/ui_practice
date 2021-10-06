@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:ui_practice/models/fake_response.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:ui_practice/screens/download_video_screen.dart';
+import 'package:ui_practice/screens/player_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int index;
@@ -93,109 +96,132 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                       Positioned(
                           bottom: 0,
                           width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).buttonColor),
-                                  child: Icon(
-                                    Icons.play_arrow_rounded,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  "${ResponseData.elementAt(widget.index).name}",
-                                  style: TextStyle(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => PlayerScreen()));
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).buttonColor),
+                                    child: Icon(
+                                      Icons.play_arrow_rounded,
+                                      size: 30,
                                       color: Colors.white,
-                                      fontFamily: Theme.of(context)
-                                          .textTheme
-                                          .headline1!
-                                          .fontFamily,
-                                      fontSize: 25),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "2021 | Action, Crime, Drama",
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontFamily: Theme.of(context)
-                                          .textTheme
-                                          .headline1!
-                                          .fontFamily,
-                                      fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                RatingBar.builder(
-                                  initialRating: 3,
-                                  minRating: 1,
-                                  itemSize: 25,
-                                  unratedColor: Theme.of(context).accentColor,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  ignoreGestures: true,
-                                  itemCount: 5,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context).buttonColor,
-                                          blurRadius: 10,
-                                          offset: Offset(1, 2),
-                                        ),
-                                      ],
-                                      color: Theme.of(context).buttonColor,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: MaterialButton(
-                                    elevation: 0,
-                                    onPressed: () {},
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/icons/ic_download.png",
-                                          width: 20,
-                                          height: 20,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Download",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "${ResponseData.elementAt(widget.index).name}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .headline1!
+                                            .fontFamily,
+                                        fontSize: 25),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "2021 | Action, Crime, Drama",
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .headline1!
+                                            .fontFamily,
+                                        fontSize: 15),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: 3,
+                                    minRating: 1,
+                                    itemSize: 25,
+                                    unratedColor: Theme.of(context).accentColor,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    ignoreGestures: true,
+                                    itemCount: 5,
+                                    itemPadding:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                            blurRadius: 10,
+                                            offset: Offset(1, 2),
+                                          ),
+                                        ],
+                                        color: Theme.of(context).buttonColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    margin: EdgeInsets.only(bottom: 20),
+                                    child: MaterialButton(
+                                      elevation: 0,
+                                      onPressed: () async {
+                                        /* await canLaunch(
+                                                "https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k")
+                                            ? await launch(
+                                                "https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k")
+                                            : throw 'Could not launch https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k';
+                                      */
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    DownloadVideoScreen()));
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "assets/icons/ic_download.png",
+                                            width: 20,
+                                            height: 20,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Download",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           )),
 

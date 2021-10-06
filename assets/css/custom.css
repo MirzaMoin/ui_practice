@@ -1,0 +1,48 @@
+ .logo-container {
+    bottom: 18px;
+    display: none;
+    cursor: pointer;
+    opacity: .9;
+    position: absolute;
+    right: 32px;
+    z-index: 11;
+}
+.v-btn .right .share {
+    cursor: pointer;
+    position: relative;
+    margin: 10px 8px;
+    display: none;
+}
+.medium-icon.icons-img.three-dots {
+    transform: rotate(90deg);
+    background-position: -112px -112px;
+        display: none;
+}
+.medium-icon.icons-img.share-generic {
+    background-position: -112px -184px;
+            display: none;
+}
+.download.info-txt.big-txt {
+     box-sizing: border-box;
+     color: rgb(255, 255, 255);
+     cursor: pointer;
+     display: inline-block;
+     font-size: 16px;
+     line-height: 48px;
+     opacity: 0.9;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     width: 100%;
+     overflow: hidden;
+ }
+ .download.info-txt.big-txt {
+ visibility: hidden;
+ } .download.info-txt.big-txt:after {
+  content:'videoname';
+  visibility: visible;
+  display: block;
+  position: absolute;
+
+  padding: 5px;
+  top: 0px;
+ }
