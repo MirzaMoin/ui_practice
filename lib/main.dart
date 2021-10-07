@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui_practice/screens/main_screen.dart';
+import 'package:ui_practice/screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: MainScreen());
+        home: SplashScreen());
   }
 }
