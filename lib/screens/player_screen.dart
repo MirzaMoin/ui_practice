@@ -17,6 +17,7 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   final GlobalKey webViewKey = GlobalKey();
+  bool isLoaded = false;
 
   @override
   void dispose() {
@@ -67,7 +68,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Container(
+          color: Colors.black,
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -75,35 +78,20 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 initialUrlRequest: URLRequest(
                     url: Uri.parse(
                         "https://mega.nz/embed/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k!1a")),
-                /*    initialData: InAppWebViewInitialData(data: """
-<!doctype html>
-<html lang="en">
-      <head>
-      <style>
-      </style>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width,height=device-height user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-          <meta http-equiv="X-UA-Compatible" content="ie=edge">
-          <title>Flutter InAppBrowser</title>
-      </head>
-      <body style="height:100%;padding:0px;margin:0px">
-          <iframe src="https://mega.nz/embed/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k!1a" width="100%" height="100%" style="position:absolute" frameborder="0" allow="autoplay; fullscreen"></iframe>
-      </body>
-</html>"""),*/
                 onWebViewCreated: (InAppWebViewController controller) async {
                   _webViewController = controller;
                 },
                 onProgressChanged: (controller, progress) async {
                   if (progress == 100) {
+                    setState(() {
+                      isLoaded = true;
+                    });
                     print("Loaded : $progress");
                     String overrideJs = await jsInjectionString(
                         context, 'assets/css/custom.css');
 
                     _webViewController.evaluateJavascript(source: overrideJs);
                   }
-                  setState(() {
-                    print("Loaded : $progress");
-                  });
                 },
                 onConsoleMessage: (InAppWebViewController controller,
                     ConsoleMessage consoleMessage) {

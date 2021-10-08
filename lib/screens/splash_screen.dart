@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ui_practice/screens/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,10 +17,18 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    animationController =
-        new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animationController = new AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 2),
+        lowerBound: 0.0,
+        upperBound: 2.0);
 
-    animationController.forward();
+    Future.delayed(Duration(seconds: 1), () {
+      animationController.forward();
+    });
+    Future.delayed(Duration(seconds: 5), () {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MainScreen()));
+    });
   }
 
   @override
@@ -29,72 +39,92 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
         body: Stack(
       children: [
-        Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              "assets/images/banner.jpg",
-              fit: BoxFit.cover,
-            ),
-            Container(
-              color: Colors.black.withOpacity(0.85),
-            ),
-            Positioned.fill(
-              top: -MediaQuery.of(context).size.height * 0.1,
-              child: AnimatedBuilder(
-                  animation: animationController,
-                  builder: (context, snapshot) {
-                    final value = animationController.value;
-                    return AnimatedOpacity(
-                      duration: Duration(seconds: 1),
-                      opacity: value,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/images/logo.png",
-                            height: 130,
-                            width: 130,
-                          ),
-                          Text(
-                            "MOVIE STUDIO",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              /*    foreground: Paint()..shader = linearGradient*/
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }),
-            ),
-            Positioned(
-                bottom: 20,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: Text(
-                    "HD PRINTS",
-                    style: TextStyle(
-                        fontSize: 40,
-                        fontFamily: GoogleFonts.prompt().fontFamily,
-                        foreground: Paint()..shader = linearGradient),
+        Positioned.fill(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  "assets/images/banner.jpg",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color(0xffff4343).withOpacity(0.7),
+                      Color(0xff2143aa).withOpacity(0.7)
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                   ),
-                ))
-          ],
+                ),
+              )
+            ],
+          ),
         ),
         Positioned.fill(
-            child: AnimatedBuilder(
-                animation: animationController,
-                builder: (context, snapshot) {
-                  return ClipPath(
-                      clipper: skinClipper(animationController.value),
-                      child: Image.asset(
+          child: AnimatedBuilder(
+              animation: animationController,
+              builder: (context, snapshot) {
+                return ClipPath(
+                  clipper: skinClipper(animationController.value),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
                         "assets/images/banner.jpg",
-                        fit: BoxFit.fill,
-                      ));
-                })),
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        color: Colors.black.withOpacity(0.85),
+                      ),
+                      Positioned.fill(
+                        top: -MediaQuery.of(context).size.height * 0.1,
+                        child: AnimatedBuilder(
+                            animation: animationController,
+                            builder: (context, snapshot) {
+                              final value = animationController.value;
+                              return AnimatedOpacity(
+                                duration: Duration(seconds: 1),
+                                opacity: value == 2.0 ? 1 : 0,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/logo.png",
+                                      height: 130,
+                                      width: 130,
+                                    ),
+                                    Text(
+                                      "MOVIE STUDIO",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        /*    foreground: Paint()..shader = linearGradient*/
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                      Positioned(
+                          bottom: 20,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: Text(
+                              "HD PRINTS",
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontFamily: GoogleFonts.prompt().fontFamily,
+                                  foreground: Paint()..shader = linearGradient),
+                            ),
+                          ))
+                    ],
+                  ),
+                );
+              }),
+        ),
       ],
     ));
   }
@@ -115,7 +145,7 @@ class skinClipper extends CustomClipper<Path> {
     path.addOval(Rect.fromCenter(
         center: center,
         width: size.width * 2 * value,
-        height: size.height * 2 * value));
+        height: size.height * 1 * value));
     return path;
   }
 
