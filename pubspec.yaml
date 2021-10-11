@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^6.0.10
   dio: ^4.0.0
   path_provider: ^2.0.4
+  lottie: ^1.2.1
 
 
 
@@ -62,6 +63,7 @@ flutter:
     - assets/icons/
     - assets/css/
     - assets/images/
+    - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

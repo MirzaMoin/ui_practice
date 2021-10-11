@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui_practice/models/fake_response.dart';
+import 'package:ui_practice/screens/category_list.dart';
 
 import 'movie_details_screen.dart';
 
@@ -365,13 +366,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             Theme.of(context).textTheme.headline1!.fontFamily),
                   ),
                 ),
-                Text(
-                  "See more",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 12,
-                      fontFamily:
-                          Theme.of(context).textTheme.headline1!.fontFamily),
+                GestureDetector(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => CategoryListScreen())),
+                  child: Text(
+                    "See more",
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                        fontSize: 12,
+                        fontFamily:
+                            Theme.of(context).textTheme.headline1!.fontFamily),
+                  ),
                 ),
               ],
             ),

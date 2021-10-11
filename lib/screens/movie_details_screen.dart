@@ -266,11 +266,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                   decoration: BoxDecoration(
                       color: Theme.of(context).backgroundColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(12),
                   child: Image.asset(
-                    "assets/icons/ic_back.png",
-                    width: 25,
-                    height: 25,
+                    "assets/icons/ic_back_arrow.png",
+                    width: 20,
+                    height: 20,
                     color: Colors.white,
                   ),
                 ),

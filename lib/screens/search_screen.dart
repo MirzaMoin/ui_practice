@@ -13,14 +13,33 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 45),
           child: Column(
             children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Search",
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
-                margin: EdgeInsets.all(20),
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 padding: EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Color(0xff2c3254), width: 1)),
                 child: TextField(
                   cursorColor: Color(0xff2c3254),
