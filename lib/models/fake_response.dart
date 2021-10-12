@@ -1,8 +1,10 @@
 class Response {
+  int id;
   String name;
   String imageUrl;
+  bool isFavourite;
 
-  Response(this.name, this.imageUrl);
+  Response(this.id, this.name, this.imageUrl, {this.isFavourite = false});
 }
 
 class Categories {
@@ -27,22 +29,22 @@ final CategoriesList = [
   Categories("Sport", "🏋️‍♀️"),
 ];
 final ResponseData = [
-  Response("GOLD",
+  Response(0, "GOLD",
       "https://static.tvmaze.com/uploads/images/original_untouched/84/211238.jpg"),
-  Response("Gold Rush",
+  Response(1, "Gold Rush",
       "https://static.tvmaze.com/uploads/images/original_untouched/244/610985.jpg"),
-  Response("Attic Gold",
+  Response(2, "Attic Gold",
       "https://static.tvmaze.com/uploads/images/original_untouched/16/41290.jpg"),
-  Response("White Gold",
+  Response(3, "White Gold",
       "https://static.tvmaze.com/uploads/images/original_untouched/113/283528.jpg"),
-  Response("Backroad Gold",
+  Response(4, "Backroad Gold",
       "https://static.tvmaze.com/uploads/images/original_untouched/93/233881.jpg"),
-  Response("Gold Digger",
+  Response(5, "Gold Digger",
       "https://static.tvmaze.com/uploads/images/original_untouched/218/546082.jpg"),
-  Response("Yukon Gold",
+  Response(6, "Yukon Gold",
       "https://static.tvmaze.com/uploads/images/original_untouched/20/51711.jpg"),
-  Response("Hitler's Gold",
+  Response(7, "Hitler's Gold",
       "https://static.tvmaze.com/uploads/images/original_untouched/279/698792.jpg"),
-  Response("Gold Town",
+  Response(8, "Gold Town",
       "https://static.tvmaze.com/uploads/images/original_untouched/300/750242.jpg"),
 ];

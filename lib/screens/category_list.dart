@@ -47,14 +47,13 @@ class _CategoryListScreenState extends State<CategoryListScreen>
                   Categories category = CategoriesList.elementAt(index);
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      /* Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MovieDetailsScreen(index)));
+                              builder: (context) => MovieDetailsScreen(index)));*/
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       child: SingleChildScrollView(
                         child: Material(
                           color: Colors.transparent,
@@ -97,7 +96,7 @@ class _CategoryListScreenState extends State<CategoryListScreen>
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 150,
                   mainAxisExtent: 80,
-                  crossAxisSpacing: 5,
+                  crossAxisSpacing: 13,
                 ),
               ),
               getHeaderBack(),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/main_screen.dart';
 import 'package:ui_practice/screens/splash_screen.dart';
 
@@ -29,7 +31,14 @@ Future<void> main() async {
       );
     }
   }
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<MovieListProvider>(
+        create: (_) => MovieListProvider(context: _),
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -276,8 +276,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    MovieDetailsScreen(index)));
+                                builder: (context) => MovieDetailsScreen(
+                                    ResponseData.elementAt(index))));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -394,11 +394,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Categories category = CategoriesList.elementAt(index);
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        /*       Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    MovieDetailsScreen(index)));
+                                    MovieDetailsScreen(index)));*/
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

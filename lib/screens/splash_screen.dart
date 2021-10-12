@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,6 +19,10 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      Provider.of<MovieListProvider>(context, listen: false).addList();
+    });
+
     animationController = new AnimationController(
         vsync: this,
         duration: Duration(seconds: 2),

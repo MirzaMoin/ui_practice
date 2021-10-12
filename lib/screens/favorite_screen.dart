@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui_practice/models/fake_response.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/login_screen.dart';
+import 'package:ui_practice/screens/movie_details_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -10,7 +13,7 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  bool isLogin = false;
+  bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,53 +41,63 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 ],
               ),
               isLogin
-                  ? Expanded(
-                      child: GridView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: ResponseData.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  ResponseData.elementAt(index).imageUrl,
-                                  fit: BoxFit.fill,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.18,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.35,
+                  ? Expanded(child: Consumer<MovieListProvider>(
+                      builder: (context, provider, _) {
+                      List<Response> list = provider.getFavoriteList();
+                      return GridView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          Response res = list.elementAt(index);
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => MovieDetailsScreen(res)));
+                            },
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    list.elementAt(index).imageUrl,
+                                    fit: BoxFit.fill,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.18,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${ResponseData.elementAt(index).name}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .fontFamily),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 150,
-                        mainAxisExtent: 200,
-                        crossAxisSpacing: 10,
-                      ),
-                    ))
+                                Container(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${list.elementAt(index).name}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .headline1!
+                                                .fontFamily),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 150,
+                          mainAxisExtent: 200,
+                          crossAxisSpacing: 10,
+                        ),
+                      );
+                    }))
                   : Expanded(
                       child: Center(
                           child: Column(

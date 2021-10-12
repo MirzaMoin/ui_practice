@@ -2,16 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui_practice/models/fake_response.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/download_video_screen.dart';
 import 'package:ui_practice/screens/player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
-  final int index;
-  const MovieDetailsScreen(this.index, {Key? key}) : super(key: key);
+  final Response response;
+  const MovieDetailsScreen(this.response, {Key? key}) : super(key: key);
 
   @override
   _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
@@ -49,10 +51,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                     child: Container(
                       color: Colors.transparent,
                       child: Hero(
-                        tag:
-                            "movie${ResponseData.elementAt(widget.index).name}",
+                        tag: "movie${widget.response.name}",
                         child: Image.network(
-                          ResponseData.elementAt(widget.index).imageUrl,
+                          widget.response.imageUrl,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -123,7 +124,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                                     height: 20,
                                   ),
                                   Text(
-                                    "${ResponseData.elementAt(widget.index).name}",
+                                    "${widget.response.name}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: Theme.of(context)
@@ -250,77 +251,102 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
       top: 40,
       left: 20,
       width: MediaQuery.of(context).size.width * 0.9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  print("Back Called");
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.all(12),
-                  child: Image.asset(
-                    "assets/icons/ic_back_arrow.png",
-                    width: 20,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Row(
+      child: Consumer<MovieListProvider>(
+        builder: (context, provider, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).backgroundColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(10),
-                    child: Image.asset(
-                      "assets/icons/ic_heart.png",
-                      width: 25,
-                      height: 25,
-                      color: Colors.white,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      print("Back Called");
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .backgroundColor
+                              .withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: EdgeInsets.all(12),
+                      child: Image.asset(
+                        "assets/icons/ic_back_arrow.png",
+                        width: 20,
+                        height: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).backgroundColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(10),
-                    child: Image.asset(
-                      "assets/icons/ic_share.png",
-                      width: 25,
-                      height: 25,
-                      color: Colors.white,
+              Row(
+                children: [
+                  ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await provider.updateFavorite(
+                              widget.response.id,
+                              !provider.responseList
+                                  .elementAt(widget.response.id)
+                                  .isFavourite);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .backgroundColor
+                                  .withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10)),
+                          padding: EdgeInsets.all(10),
+                          child: Image.asset(
+                            provider.responseList
+                                    .elementAt(widget.response.id)
+                                    .isFavourite
+                                ? "assets/icons/ic_heart_fill.png"
+                                : "assets/icons/ic_heart.png",
+                            width: 25,
+                            height: 25,
+                            color: provider.responseList
+                                    .elementAt(widget.response.id)
+                                    .isFavourite
+                                ? Theme.of(context).buttonColor
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .backgroundColor
+                                .withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: EdgeInsets.all(10),
+                        child: Image.asset(
+                          "assets/icons/ic_share.png",
+                          width: 25,
+                          height: 25,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -542,7 +568,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
 
   Widget getYouMayLike() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -553,7 +579,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "You may like",
+                  "You may also like",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -583,11 +609,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        /*  Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    MovieDetailsScreen(index)));
+                                    MovieDetailsScreen(index)));*/
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
