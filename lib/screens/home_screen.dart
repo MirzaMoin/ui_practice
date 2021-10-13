@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ui_practice/models/fake_response.dart';
 import 'package:ui_practice/screens/category_list.dart';
+import 'package:ui_practice/utils/utils.dart';
 
 import 'movie_details_screen.dart';
 
@@ -33,6 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     });
+
+    /*  Future.delayed(Duration(seconds: 2), () {
+      Utils.showUpdateDialog(
+          context: context,
+          title: "Update App",
+          description: "Update app and get best features ");
+    });*/
   }
 
   @override
@@ -185,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/icons/ic_heart.png",
                             width: 20,
                             height: 20,
-                            color: Color(0xffefe2f6),
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(
@@ -200,22 +206,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/icons/ic_download.png",
                             width: 20,
                             height: 20,
-                            color: Color(0xffefe2f6),
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).accentColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Image.asset(
-                            "assets/icons/ic_more.png",
-                            width: 20,
-                            height: 20,
-                            color: Color(0xffefe2f6),
+                        GestureDetector(
+                          onTap: () {
+                            showWatchedDialog(
+                                context: context,
+                                title: "Did you already watched?",
+                                description:
+                                    "If you select yes it will not visible to you");
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).accentColor,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Image.asset(
+                              "assets/icons/ic_watched.png",
+                              width: 20,
+                              height: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -442,6 +457,76 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   })),
+        ],
+      ),
+    );
+  }
+
+  static showWatchedDialog(
+      {required BuildContext context,
+      required String title,
+      required String description}) async {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).accentColor,
+        title: Container(
+          width: 500,
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "$title",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        content: Container(
+          child: Text(
+            "$description",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        actions: [
+          MaterialButton(
+            height: 40,
+            color: Theme.of(context).backgroundColor,
+            onPressed: () async {},
+            child: Text(
+              'No',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          MaterialButton(
+            height: 40,
+            color: Theme.of(context).backgroundColor,
+            onPressed: () async {},
+            child: Text(
+              'Yes',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ],
       ),
     );

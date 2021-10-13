@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:ui_practice/screens/download_screen.dart';
 import 'package:ui_practice/screens/favorite_screen.dart';
@@ -22,6 +20,11 @@ class _MainScreenState extends State<MainScreen> {
     FavoriteScreen(),
     DownloadScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

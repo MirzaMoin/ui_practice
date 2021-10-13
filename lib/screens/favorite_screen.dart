@@ -44,59 +44,73 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   ? Expanded(child: Consumer<MovieListProvider>(
                       builder: (context, provider, _) {
                       List<Response> list = provider.getFavoriteList();
-                      return GridView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          Response res = list.elementAt(index);
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MovieDetailsScreen(res)));
-                            },
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(
-                                    list.elementAt(index).imageUrl,
-                                    fit: BoxFit.fill,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.18,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.35,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(top: 5),
+                      return list.length > 0
+                          ? GridView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: list.length,
+                              itemBuilder: (context, index) {
+                                Response res = list.elementAt(index);
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                MovieDetailsScreen(res)));
+                                  },
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "${list.elementAt(index).name}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: Theme.of(context)
-                                                .textTheme
-                                                .headline1!
-                                                .fontFamily),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(
+                                          list.elementAt(index).imageUrl,
+                                          fit: BoxFit.fill,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.18,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.35,
+                                        ),
                                       ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${list.elementAt(index).name}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .fontFamily),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 150,
-                          mainAxisExtent: 200,
-                          crossAxisSpacing: 10,
-                        ),
-                      );
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 150,
+                                mainAxisExtent: 200,
+                                crossAxisSpacing: 10,
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                              "No favorite item found",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontSize: 18),
+                            ));
                     }))
                   : Expanded(
                       child: Center(
