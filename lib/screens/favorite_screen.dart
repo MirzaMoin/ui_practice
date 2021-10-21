@@ -52,11 +52,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 Response res = list.elementAt(index);
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
+                                  /*  Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
-                                                MovieDetailsScreen(res)));
+                                                MovieDetailsScreen(res)));*/
                                   },
                                   child: Column(
                                     children: [

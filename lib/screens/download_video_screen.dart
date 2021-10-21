@@ -12,6 +12,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DownloadVideoScreen extends StatefulWidget {
+  final String url;
+  DownloadVideoScreen(this.url);
+
   @override
   _DownloadVideoScreenState createState() => new _DownloadVideoScreenState();
 }

@@ -28,7 +28,7 @@ final CategoriesList = [
   Categories("Sci-Fi", "👽"),
   Categories("Sport", "🏋️‍♀️"),
 ];
-final ResponseData = [
+final ResponseDataList = [
   Response(0, "GOLD",
       "https://static.tvmaze.com/uploads/images/original_untouched/84/211238.jpg"),
   Response(1, "Gold Rush",

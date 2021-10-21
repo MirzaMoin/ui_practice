@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ui_practice/models/response_data.dart';
+import 'package:ui_practice/models/response_model.dart';
 import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/main_screen.dart';
+import 'package:ui_practice/services/http_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,13 +18,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController animationController;
+  HttpService httpService = new HttpService();
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      Provider.of<MovieListProvider>(context, listen: false).addList();
-    });
+    loadData();
 
     animationController = new AnimationController(
         vsync: this,
@@ -133,6 +135,18 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ],
     ));
+  }
+
+  Future<void> loadData() async {
+    ResponseModel? responseData =
+        await httpService.get(path: "getDisplayData.php");
+    if (responseData!.statusCode == 1) {
+      ResponseData res = ResponseData.fromJson(responseData.responseData!);
+      print("Length of ${res.movieList!.length}");
+      Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
+    } else {
+      print("Something went wrong");
+    }
   }
 }
 

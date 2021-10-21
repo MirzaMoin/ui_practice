@@ -11,6 +11,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:http/http.dart' as http;
 
 class PlayerScreen extends StatefulWidget {
+  final url;
+  PlayerScreen(this.url);
+
   @override
   _PlayerScreenState createState() => new _PlayerScreenState();
 }
@@ -77,7 +80,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               InAppWebView(
                 initialUrlRequest: URLRequest(
                     url: Uri.parse(
-                        "https://mega.nz/embed/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k!1a")),
+                        "${widget.url}")),
                 onWebViewCreated: (InAppWebViewController controller) async {
                   _webViewController = controller;
                 },

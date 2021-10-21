@@ -2,28 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_practice/models/fake_response.dart';
+import 'package:ui_practice/models/genres_model.dart';
+import 'package:ui_practice/models/movie_model.dart';
+import 'package:ui_practice/models/response_data.dart';
 
 class MovieListProvider extends ChangeNotifier {
   final BuildContext context;
   MovieListProvider({required this.context});
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  List<Response> responseList = [];
+  List<Response> movieList = [];
+  List<MovieModel> allMovieList = [];
+  List<MovieModel> topMovieList = [];
+  List<MovieModel> movieListLatest = [];
+  List<GenresModel> generesList = [];
+  List<GenresModel> allGenresList = [];
+
+  setMovieList(ResponseData responseData) {
+    topMovieList.addAll(responseData.topMovies!);
+    movieListLatest.addAll(responseData.movieListLatest!);
+    allMovieList.addAll(responseData.movieList!);
+    generesList.addAll(responseData.genres!);
+    allGenresList.addAll(responseData.totalCategory!);
+    notifyListeners();
+  }
 
   addMovie(Response response) async {
-    responseList.add(response);
+    movieList.add(response);
     print("Movie Added");
     notifyListeners();
-    print("Movie List Length ${responseList.length}");
+    print("Movie List Length ${allMovieList.length}");
 
     final SharedPreferences prefs = await _prefs;
     if (prefs.containsKey("favorite")) {}
   }
 
   updateFavorite(int id, bool isFavorite) async {
-    int index = responseList.indexWhere((element) => element.id == id);
-    responseList.elementAt(index).isFavourite = isFavorite;
-    print("Movie List Length ${responseList.length}");
+    int index = movieList.indexWhere((element) => element.id == id);
+    movieList.elementAt(index).isFavourite = isFavorite;
+    print("Movie List Length ${allMovieList.length}");
 
     print("Updated Favorite to $isFavorite at $index");
 
@@ -33,16 +50,16 @@ class MovieListProvider extends ChangeNotifier {
   }
 
   getFavoriteList() {
-    return responseList.where((element) => element.isFavourite).toList();
+    return movieList.where((element) => element.isFavourite).toList();
   }
 
   List<Response> searchMovie(String name) {
-    return responseList
+    return movieList
         .where((element) => element.name.toLowerCase().contains(name))
         .toList();
   }
 
-  void addList() {
+  void loadData() {
     addMovie(
       Response(0, "GOLD",
           "https://static.tvmaze.com/uploads/images/original_untouched/84/211238.jpg"),

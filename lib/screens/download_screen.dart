@@ -46,7 +46,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                   child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: false,
-                      itemCount: ResponseData.length,
+                      itemCount: ResponseDataList.length,
                       itemBuilder: (context, index) {
                         /*   bool isDownloaded = true;
                         if (index % 2 == 0) {
@@ -75,7 +75,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           child: Image.network(
-                                            ResponseData.elementAt(index)
+                                            ResponseDataList.elementAt(index)
                                                 .imageUrl,
                                             fit: BoxFit.fill,
                                             width: MediaQuery.of(context)
@@ -106,7 +106,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        ResponseData.elementAt(index).name,
+                                        ResponseDataList.elementAt(index).name,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       Text(
