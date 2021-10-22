@@ -316,8 +316,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                       filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
                       child: GestureDetector(
                         onTap: () async {
-                          await provider.updateFavorite(
-                              movie.movieId!, movie.isFavourite);
+                          await provider.updateFavorite(movie.movieId!,
+                              !provider.isFavorite(movie.movieId.toString()));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -327,12 +327,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                               borderRadius: BorderRadius.circular(10)),
                           padding: EdgeInsets.all(10),
                           child: Image.asset(
-                            movie.isFavourite
+                            provider.isFavorite(movie.movieId.toString())
                                 ? "assets/icons/ic_heart_fill.png"
                                 : "assets/icons/ic_heart.png",
                             width: 25,
                             height: 25,
-                            color: movie.isFavourite
+                            color: provider.isFavorite(movie.movieId.toString())
                                 ? Theme.of(context).buttonColor
                                 : Colors.white,
                           ),

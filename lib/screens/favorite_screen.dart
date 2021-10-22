@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_practice/models/fake_response.dart';
+import 'package:ui_practice/models/movie_model.dart';
 import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/login_screen.dart';
 import 'package:ui_practice/screens/movie_details_screen.dart';
@@ -43,16 +44,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               isLogin
                   ? Expanded(child: Consumer<MovieListProvider>(
                       builder: (context, provider, _) {
-                      List<Response> list = provider.getFavoriteList();
-                      return list.length > 0
+                      List<MovieModel> movie = provider.favoriteMovieList;
+                      return movie.length > 0
                           ? GridView.builder(
                               physics: BouncingScrollPhysics(),
-                              itemCount: list.length,
+                              itemCount: movie.length,
                               itemBuilder: (context, index) {
-                                Response res = list.elementAt(index);
+                                MovieModel mov = movie.elementAt(index);
                                 return GestureDetector(
                                   onTap: () {
-                                  /*  Navigator.push(
+                                    /*  Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
@@ -63,7 +64,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Image.network(
-                                          list.elementAt(index).imageUrl,
+                                          "${mov.thumbImage}",
                                           fit: BoxFit.fill,
                                           height: MediaQuery.of(context)
                                                   .size
@@ -82,7 +83,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${list.elementAt(index).name}",
+                                              "${mov.name}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontFamily: Theme.of(context)

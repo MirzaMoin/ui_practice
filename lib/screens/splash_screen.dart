@@ -144,6 +144,34 @@ class _SplashScreenState extends State<SplashScreen>
       ResponseData res = ResponseData.fromJson(responseData.responseData!);
       print("Length of ${res.movieList!.length}");
       Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
+      Provider.of<MovieListProvider>(context, listen: false).getFavoriteList();
+      loadFav();
+    } else {
+      print("Something went wrong");
+    }
+  }
+
+  Future<void> loadFav() async {
+    String data = "";
+    await Provider.of<MovieListProvider>(context, listen: false)
+        .getFavoriteList();
+    List<String> favList =
+        Provider.of<MovieListProvider>(context, listen: false).favoriteList;
+    for (String s in favList) {
+      if (data.isEmpty) {
+        data = s;
+      } else {
+        data = data + ",$s";
+      }
+    }
+
+    ResponseModel? responseData =
+        await httpService.get(path: "getFavoriteList.php?ids=$data");
+    if (responseData!.statusCode == 1) {
+      ResponseData res = ResponseData.fromJson(responseData.responseData!);
+      print("Length of ${res.movieList!.length}");
+      Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
+      Provider.of<MovieListProvider>(context, listen: false).getFavoriteList();
     } else {
       print("Something went wrong");
     }

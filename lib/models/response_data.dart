@@ -9,6 +9,7 @@ class ResponseData {
   List<MovieModel>? movieList;
   List<MovieModel>? movieListLatest;
   List<GenresModel>? totalCategory;
+  List<MovieModel>? favoriteMovieList;
 
   ResponseData(
       {this.topMovies,
@@ -45,6 +46,12 @@ class ResponseData {
     totalCategory = json.containsKey('all_categories')
         ? (json['all_categories'])
                 .map<GenresModel>((e) => GenresModel.fromJson(e))
+                .toList() ??
+            []
+        : [];
+    favoriteMovieList = json.containsKey('movies')
+        ? (json['movies'])
+                .map<MovieModel>((e) => MovieModel.fromJson(e))
                 .toList() ??
             []
         : [];
