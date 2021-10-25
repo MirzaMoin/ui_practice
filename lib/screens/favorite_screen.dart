@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_practice/models/fake_response.dart';
 import 'package:ui_practice/models/movie_model.dart';
+import 'package:ui_practice/models/response_data.dart';
+import 'package:ui_practice/models/response_model.dart';
 import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/login_screen.dart';
 import 'package:ui_practice/screens/movie_details_screen.dart';
+import 'package:ui_practice/services/http_service.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -15,6 +18,11 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   bool isLogin = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

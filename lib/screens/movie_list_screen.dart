@@ -67,7 +67,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
                   Consumer<MovieListProvider>(builder: (context, provider, _) {
                 List<MovieModel> movielist = [];
 
-                if (provider.categoryMovieList.length == 0) {
+                /*if (provider.categoryMovieList.length == 0) {
                   for (MovieModel m in provider.allMovieList) {
                     for (GenresModel g in m.genres!) {
                       if (g.categoryId == widget.category!.categoryId) {
@@ -82,102 +82,138 @@ class _MovieListScreenState extends State<MovieListScreen> {
                   }
                   provider.categoryMovieList.clear();
                   provider.categoryMovieList.addAll(movielist.toList());
-                }
+                }*/
 
                 List<MovieModel> movie = provider.categoryMovieList;
-                return movie.length > 0
+                return isLoading
                     ? Padding(
                         padding: EdgeInsets.only(top: 10),
-                        child: AnimationLimiter(
-                          child: Shimmer.fromColors(
-                            baseColor: Colors.grey.withOpacity(0.9),
-                            highlightColor: Colors.grey.withOpacity(0.9),
-                            enabled: false,
-                            child: GridView.builder(
-                              padding: EdgeInsets.zero,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: movie.length,
-                              itemBuilder: (context, index) {
-                                MovieModel mov = movie.elementAt(index);
-                                return AnimationConfiguration.staggeredGrid(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  columnCount: 3,
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    horizontalOffset: 0.0,
-                                    child: FadeInAnimation(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      MovieDetailsScreen(mov)));
-                                        },
-                                        child: Column(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              child: Image.network(
-                                                "${mov.thumbImage}",
-                                                fit: BoxFit.fill,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.18,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.35,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(top: 5),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${mov.name}",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .headline1!
-                                                                .fontFamily),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                        child: Shimmer.fromColors(
+                          baseColor: Theme.of(context).accentColor,
+                          highlightColor:
+                              Theme.of(context).accentColor.withOpacity(0.4),
+                          enabled: isLoading,
+                          child: GridView.builder(
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: 12,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.network(
+                                      "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
+                                      fit: BoxFit.fill,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.18,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.35,
                                     ),
                                   ),
-                                );
-                              },
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 150,
-                                mainAxisExtent: 200,
-                                crossAxisSpacing: 10,
-                              ),
+                                ],
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 150,
+                              mainAxisExtent: isLoading ? 180 : 200,
+                              crossAxisSpacing: 10,
                             ),
                           ),
                         ),
                       )
-                    : Center(
-                        child: isLoading
-                            ? Container()
-                            : Text(
-                                "No item found",
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontSize: 18),
-                              ));
+                    : movie.length > 0
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: AnimationLimiter(
+                              child: GridView.builder(
+                                padding: EdgeInsets.zero,
+                                physics: BouncingScrollPhysics(),
+                                itemCount: movie.length,
+                                itemBuilder: (context, index) {
+                                  MovieModel mov = movie.elementAt(index);
+                                  return AnimationConfiguration.staggeredGrid(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 375),
+                                    columnCount: 3,
+                                    child: SlideAnimation(
+                                      verticalOffset: 50.0,
+                                      horizontalOffset: 0.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        MovieDetailsScreen(
+                                                            mov)));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                child: Image.network(
+                                                  "${mov.thumbImage}",
+                                                  fit: BoxFit.fill,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.18,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.35,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    EdgeInsets.only(top: 5),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${mov.name}",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline1!
+                                                                  .fontFamily),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                gridDelegate:
+                                    SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 150,
+                                  mainAxisExtent: 200,
+                                  crossAxisSpacing: 10,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: isLoading
+                                ? Container()
+                                : Text(
+                                    "No item found",
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontSize: 18),
+                                  ));
               }))
             ],
           ),

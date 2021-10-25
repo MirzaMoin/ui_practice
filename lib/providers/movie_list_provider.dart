@@ -24,6 +24,7 @@ class MovieListProvider extends ChangeNotifier {
   int selectedCategoryID = 0;
 
   setFavoriteList(ResponseData responseData) {
+    favoriteMovieList.clear();
     favoriteMovieList.addAll(responseData.favoriteMovieList!);
     notifyListeners();
   }

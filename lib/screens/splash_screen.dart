@@ -144,7 +144,6 @@ class _SplashScreenState extends State<SplashScreen>
       ResponseData res = ResponseData.fromJson(responseData.responseData!);
       print("Length of ${res.movieList!.length}");
       Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
-      Provider.of<MovieListProvider>(context, listen: false).getFavoriteList();
       loadFav();
     } else {
       print("Something went wrong");
@@ -170,8 +169,6 @@ class _SplashScreenState extends State<SplashScreen>
     if (responseData!.statusCode == 1) {
       ResponseData res = ResponseData.fromJson(responseData.responseData!);
       print("Length of ${res.movieList!.length}");
-      Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
-      Provider.of<MovieListProvider>(context, listen: false).getFavoriteList();
       Provider.of<MovieListProvider>(context, listen: false)
           .setFavoriteList(res);
     } else {

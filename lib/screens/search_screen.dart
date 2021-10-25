@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:ui_practice/models/movie_model.dart';
 import 'package:ui_practice/models/response_data.dart';
 import 'package:ui_practice/models/response_model.dart';
@@ -119,33 +120,29 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(child:
                   Consumer<MovieListProvider>(builder: (context, provider, _) {
                 List<MovieModel> movie = provider.searchMovieList;
-                return movie.length > 0
+                return isSearching
                     ? Padding(
                         padding: EdgeInsets.only(
                           top: 10,
                           left: 20,
                           right: 20,
                         ),
-                        child: GridView.builder(
-                          padding: EdgeInsets.zero,
-                          physics: BouncingScrollPhysics(),
-                          itemCount: movie.length,
-                          itemBuilder: (context, index) {
-                            MovieModel mov = movie.elementAt(index);
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            MovieDetailsScreen(mov)));
-                              },
-                              child: Column(
+                        child: Shimmer.fromColors(
+                          baseColor: Theme.of(context).accentColor,
+                          highlightColor:
+                              Theme.of(context).accentColor.withOpacity(0.4),
+                          enabled: isSearching,
+                          child: GridView.builder(
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: 12,
+                            itemBuilder: (context, index) {
+                              return Column(
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.network(
-                                      "${mov.thumbImage}",
+                                      "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -154,47 +151,97 @@ class _SearchScreenState extends State<SearchScreen> {
                                           0.35,
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.only(top: 5),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${mov.name}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1!
-                                                  .fontFamily),
-                                        ),
-                                      ],
-                                    ),
-                                  )
                                 ],
-                              ),
-                            );
-                          },
-                          gridDelegate:
-                              SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 150,
-                            mainAxisExtent: 200,
-                            crossAxisSpacing: 10,
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 150,
+                              mainAxisExtent: isSearching ? 180 : 200,
+                              crossAxisSpacing: 10,
+                            ),
                           ),
                         ),
                       )
-                    : Center(
-                        child: isSearching
-                            ? CircularProgressIndicator(
-                                color: Theme.of(context).accentColor,
-                              )
-                            : Text(
-                                "No search item found",
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontSize: 18),
-                              ));
+                    : movie.length > 0
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              left: 20,
+                              right: 20,
+                            ),
+                            child: GridView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: movie.length,
+                              itemBuilder: (context, index) {
+                                MovieModel mov = movie.elementAt(index);
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                MovieDetailsScreen(mov)));
+                                  },
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(
+                                          "${mov.thumbImage}",
+                                          fit: BoxFit.fill,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.18,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.35,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${mov.name}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .fontFamily),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 150,
+                                mainAxisExtent: 200,
+                                crossAxisSpacing: 10,
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: isSearching
+                                ? CircularProgressIndicator(
+                                    color: Theme.of(context).accentColor,
+                                  )
+                                : Text(
+                                    "No search item found",
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontSize: 18),
+                                  ));
               }))
             ],
           ),
