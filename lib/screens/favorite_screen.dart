@@ -53,11 +53,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 MovieModel mov = movie.elementAt(index);
                                 return GestureDetector(
                                   onTap: () {
-                                    /*  Navigator.push(
+                                    Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
-                                                MovieDetailsScreen(res)));*/
+                                                MovieDetailsScreen(mov)));
                                   },
                                   child: Column(
                                     children: [

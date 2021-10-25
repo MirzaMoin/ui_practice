@@ -9,6 +9,7 @@ import 'package:ui_practice/models/genres_model.dart';
 import 'package:ui_practice/models/movie_model.dart';
 import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/category_list.dart';
+import 'package:ui_practice/screens/movie_list_screen.dart';
 import 'package:ui_practice/utils/utils.dart';
 
 import 'movie_details_screen.dart';
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Callllled");
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -300,13 +302,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontFamily:
                           Theme.of(context).textTheme.headline1!.fontFamily),
                 ),
-                Text(
-                  "See more",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 12,
-                      fontFamily:
-                          Theme.of(context).textTheme.headline1!.fontFamily),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => MovieListScreen(
+                                  category: genres,
+                                )));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      "See more",
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 12,
+                          fontFamily: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .fontFamily),
+                    ),
+                  ),
                 ),
               ],
             ),

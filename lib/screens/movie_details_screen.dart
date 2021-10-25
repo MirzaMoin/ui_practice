@@ -46,8 +46,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: Consumer<MovieListProvider>(builder: (context, provider, child) {
-          MovieModel movie = provider.allMovieList
-              .elementAt(provider.allMovieList.indexOf(widget.movie));
+          MovieModel movie = widget.movie;
+          /*provider.allMovieList
+              .elementAt(provider.allMovieList.indexOf(widget.movie));*/
 
           String genres = "";
           for (GenresModel g in movie.genres!) {
@@ -317,7 +318,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                       child: GestureDetector(
                         onTap: () async {
                           await provider.updateFavorite(movie.movieId!,
-                              !provider.isFavorite(movie.movieId.toString()));
+                              !provider.isFavorite(movie.movieId.toString()),
+                              movie: movie);
                         },
                         child: Container(
                           decoration: BoxDecoration(

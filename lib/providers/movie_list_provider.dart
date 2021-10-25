@@ -18,10 +18,32 @@ class MovieListProvider extends ChangeNotifier {
   List<GenresModel> generesList = [];
   List<GenresModel> allGenresList = [];
   List<MovieModel> favoriteMovieList = [];
+  List<MovieModel> searchMovieList = [];
+  List<MovieModel> categoryMovieList = [];
   List<String> favoriteList = [];
+  int selectedCategoryID = 0;
 
   setFavoriteList(ResponseData responseData) {
-    favoriteMovieList.addAll(responseData.movieList!);
+    favoriteMovieList.addAll(responseData.favoriteMovieList!);
+    notifyListeners();
+  }
+
+  setMovieListByCategory(ResponseData responseData, int? categoryId) {
+    final tempList = [];
+
+    for (MovieModel m in responseData.categoryMovieList!) {
+      for (GenresModel g in m.genres!) {
+        if (g.categoryId == categoryId) {
+          int i = categoryMovieList
+              .indexWhere((element) => element.movieId == m.movieId);
+
+          if (i == -1) {
+            categoryMovieList.add(m);
+          }
+          notifyListeners();
+        }
+      }
+    }
   }
 
   setMovieList(ResponseData responseData) {
@@ -33,14 +55,22 @@ class MovieListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateFavorite(int movieID, bool isFavorite) async {
+  setSearchData(ResponseData responseData) {
+    searchMovieList.clear();
+    searchMovieList.addAll(responseData.searchMovieList!);
+    notifyListeners();
+  }
+
+  updateFavorite(int movieID, bool isFavorite, {MovieModel? movie}) async {
     if (favoriteList.contains(movieID.toString())) {
       if (!isFavorite) {
         favoriteList.remove(movieID.toString());
+        favoriteMovieList.removeWhere((element) => element.movieId == movieID);
       }
     } else {
       if (isFavorite) {
         favoriteList.add(movieID.toString());
+        favoriteMovieList.add(movie!);
       }
     }
     final SharedPreferences prefs = await _prefs;

@@ -2,9 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui_practice/models/fake_response.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:ui_practice/models/genres_model.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/download_video_screen.dart';
 import 'package:ui_practice/screens/player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,67 +41,70 @@ class _CategoryListScreenState extends State<CategoryListScreen>
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Stack(
             children: [
-              GridView.builder(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.12),
-                physics: BouncingScrollPhysics(),
-                itemCount: CategoriesList.length,
-                itemBuilder: (context, index) {
-                  Categories category = CategoriesList.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      /* Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MovieDetailsScreen(index)));*/
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: SingleChildScrollView(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).accentColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text("${category.icon}"),
-                                Container(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${category.name}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: Theme.of(context)
-                                                .textTheme
-                                                .headline1!
-                                                .fontFamily),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+              Consumer<MovieListProvider>(builder: (context, movieList, _) {
+                return GridView.builder(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.12),
+                  physics: BouncingScrollPhysics(),
+                  itemCount: movieList.allGenresList.length,
+                  itemBuilder: (context, index) {
+                    GenresModel category =
+                        movieList.allGenresList.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        /* Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MovieDetailsScreen(index)));*/
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: SingleChildScrollView(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).accentColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("${category.icon}"),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${category.name}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1!
+                                                  .fontFamily),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 150,
-                  mainAxisExtent: 80,
-                  crossAxisSpacing: 13,
-                ),
-              ),
+                    );
+                  },
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 150,
+                    mainAxisExtent: 80,
+                    crossAxisSpacing: 13,
+                  ),
+                );
+              }),
               getHeaderBack(),
             ],
           ),

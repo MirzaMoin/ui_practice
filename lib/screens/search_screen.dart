@@ -1,4 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ui_practice/models/movie_model.dart';
+import 'package:ui_practice/models/response_data.dart';
+import 'package:ui_practice/models/response_model.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
+import 'package:ui_practice/services/http_service.dart';
+
+import 'movie_details_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -8,12 +19,16 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.only(top: 45),
+          padding: const EdgeInsets.only(
+            top: 45,
+          ),
           child: Column(
             children: [
               Padding(
@@ -45,6 +60,39 @@ class _SearchScreenState extends State<SearchScreen> {
                   cursorColor: Color(0xff2c3254),
                   maxLines: 1,
                   style: TextStyle(color: Color(0xff2c3254)),
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (val) async {
+                    Provider.of<MovieListProvider>(context, listen: false)
+                        .searchMovieList
+                        .clear();
+                    setState(() {
+                      isSearching = true;
+                    });
+                    HttpService httpService = new HttpService();
+
+                    ResponseModel? responseData = await httpService.get(
+                        path: "searchMovieList.php?keyword=$val");
+
+                    if (responseData!.statusCode == 1) {
+                      setState(() {
+                        isSearching = false;
+                      });
+                      ResponseData res =
+                          ResponseData.fromJson(responseData.responseData!);
+                      print("Length of search ${res.movieList!.length}");
+                      Provider.of<MovieListProvider>(context, listen: false)
+                          .setSearchData(res);
+                    } else {
+                      setState(() {
+                        isSearching = false;
+
+                        Provider.of<MovieListProvider>(context, listen: false)
+                            .searchMovieList
+                            .clear();
+                      });
+                      print("Something went wrong");
+                    }
+                  },
                   decoration: InputDecoration(
                     hintText: "Search",
                     border: InputBorder.none,
@@ -68,6 +116,86 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
+              Expanded(child:
+                  Consumer<MovieListProvider>(builder: (context, provider, _) {
+                List<MovieModel> movie = provider.searchMovieList;
+                return movie.length > 0
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          left: 20,
+                          right: 20,
+                        ),
+                        child: GridView.builder(
+                          padding: EdgeInsets.zero,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: movie.length,
+                          itemBuilder: (context, index) {
+                            MovieModel mov = movie.elementAt(index);
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            MovieDetailsScreen(mov)));
+                              },
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.network(
+                                      "${mov.thumbImage}",
+                                      fit: BoxFit.fill,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.18,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.35,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${mov.name}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1!
+                                                  .fontFamily),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 150,
+                            mainAxisExtent: 200,
+                            crossAxisSpacing: 10,
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: isSearching
+                            ? CircularProgressIndicator(
+                                color: Theme.of(context).accentColor,
+                              )
+                            : Text(
+                                "No search item found",
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.5),
+                                    fontSize: 18),
+                              ));
+              }))
             ],
           ),
         ));

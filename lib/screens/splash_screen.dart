@@ -172,6 +172,8 @@ class _SplashScreenState extends State<SplashScreen>
       print("Length of ${res.movieList!.length}");
       Provider.of<MovieListProvider>(context, listen: false).setMovieList(res);
       Provider.of<MovieListProvider>(context, listen: false).getFavoriteList();
+      Provider.of<MovieListProvider>(context, listen: false)
+          .setFavoriteList(res);
     } else {
       print("Something went wrong");
     }

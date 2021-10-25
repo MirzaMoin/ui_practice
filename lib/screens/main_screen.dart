@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ui_practice/providers/movie_list_provider.dart';
 import 'package:ui_practice/screens/download_screen.dart';
 import 'package:ui_practice/screens/favorite_screen.dart';
 import 'package:ui_practice/screens/home_screen.dart';
@@ -61,6 +63,9 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (index) {
             setState(() {
               _selectedBottomIndex = index;
+              Provider.of<MovieListProvider>(context, listen: false)
+                  .searchMovieList
+                  .clear();
             });
           },
           items: [
