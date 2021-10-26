@@ -13,6 +13,7 @@ import 'package:ui_practice/screens/player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'movie_details_screen.dart';
+import 'movie_list_screen.dart';
 
 class CategoryListScreen extends StatefulWidget {
   const CategoryListScreen({Key? key}) : super(key: key);
@@ -52,10 +53,12 @@ class _CategoryListScreenState extends State<CategoryListScreen>
                         movieList.allGenresList.elementAt(index);
                     return GestureDetector(
                       onTap: () {
-                        /* Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MovieDetailsScreen(index)));*/
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MovieListScreen(
+                                      category: category,
+                                    )));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),

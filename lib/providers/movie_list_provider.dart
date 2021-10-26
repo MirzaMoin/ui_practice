@@ -21,6 +21,7 @@ class MovieListProvider extends ChangeNotifier {
   List<MovieModel> searchMovieList = [];
   List<MovieModel> categoryMovieList = [];
   List<String> favoriteList = [];
+  List<String> watchedList = [];
   int selectedCategoryID = 0;
 
   setFavoriteList(ResponseData responseData) {
@@ -82,6 +83,20 @@ class MovieListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  getTopListWithWatchedFilter() {}
+
+  updateWatchedList(int movieID, bool isWatched, {MovieModel? movie}) async {
+    if (!watchedList.contains(movieID.toString())) {
+      watchedList.add(movieID.toString());
+    }
+    final SharedPreferences prefs = await _prefs;
+    prefs.setStringList("watched", watchedList);
+
+    print("watched List Length ${watchedList.length}");
+
+    notifyListeners();
+  }
+
   bool isFavorite(String movieID) {
     if (favoriteList.contains(movieID.toString()))
       return true;
@@ -95,6 +110,15 @@ class MovieListProvider extends ChangeNotifier {
     favoriteList.clear();
     if (prefs.containsKey("favorite"))
       favoriteList.addAll(prefs.getStringList("favorite")!.toList());
+    notifyListeners();
+  }
+
+  getWatchedList() async {
+    final SharedPreferences prefs = await _prefs;
+
+    watchedList.clear();
+    if (prefs.containsKey("watched"))
+      watchedList.addAll(prefs.getStringList("watched")!.toList());
     notifyListeners();
   }
 

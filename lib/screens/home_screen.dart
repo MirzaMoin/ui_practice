@@ -101,10 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  int currentPage = 0;
   Widget getHeader() {
     return Consumer<MovieListProvider>(builder: (context, topMovies, _) {
       return Container(
-        height: MediaQuery.of(context).size.height * 0.4,
+        height: MediaQuery.of(context).size.height * 0.35,
         child: Stack(
           children: [
             PageView.builder(
@@ -112,76 +113,86 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: BouncingScrollPhysics(),
                 itemCount: topMovies.topMovieList.length,
                 itemBuilder: (context, index) {
+                  currentPage = index;
+
                   MovieModel movie = topMovies.topMovieList.elementAt(index);
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Image.network(
-                            "${movie.thumbImage}",
-                            fit: BoxFit.fill,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MovieDetailsScreen(movie)));
+                    },
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Image.network(
+                              "${movie.thumbImage}",
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        width: MediaQuery.of(context).size.width,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.16,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Theme.of(context).backgroundColor,
-                                    blurRadius: 100.0,
-                                    spreadRadius: 20),
-                              ],
-                              gradient: LinearGradient(
-                                colors: [
-                                  Theme.of(context)
-                                      .backgroundColor
-                                      .withOpacity(0.001),
-                                  Theme.of(context).backgroundColor
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              )),
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 80,
+                        Positioned(
+                          bottom: 0,
                           width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${movie.name}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontFamily: Theme.of(context)
-                                          .textTheme
-                                          .headline1!
-                                          .fontFamily),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          )),
-                    ],
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Theme.of(context).backgroundColor,
+                                      blurRadius: 100.0,
+                                      spreadRadius: 20),
+                                ],
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context)
+                                        .backgroundColor
+                                        .withOpacity(0.001),
+                                    Theme.of(context).backgroundColor
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                )),
+                          ),
+                        ),
+                        /* Positioned(
+                            bottom: 80,
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${movie.name}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .headline1!
+                                            .fontFamily),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
+                            )),*/
+                      ],
+                    ),
                   );
                 }),
-            Positioned(
+            /*   Positioned(
               bottom: 0,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -213,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    Padding(
+                    */ /*Padding(
                       padding: EdgeInsets.only(bottom: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -248,13 +259,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          GestureDetector(
+                          */ /* */ /* GestureDetector(
                             onTap: () {
+                              print("Current Page $currentPage");
+
                               showWatchedDialog(
                                   context: context,
                                   title: "Did you already watched?",
                                   description:
-                                      "If you select yes it will not visible to you");
+                                      "Did you already watched ${topMovies.topMovieList.elementAt(currentPage).name!}?",
+                                  onPositiveClick: () {
+                                    Provider.of<MovieListProvider>(context,
+                                            listen: false)
+                                        .updateWatchedList(
+                                            topMovies.topMovieList
+                                                .elementAt(currentPage)
+                                                .movieId!,
+                                            true);
+                                    Navigator.pop(context);
+                                  });
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -268,14 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                          ),
+                          ),*/ /* */ /*
                         ],
                       ),
-                    ),
+                    ),*/ /*
                   ],
                 ),
               ),
-            )
+            )*/
           ],
         ),
       );
@@ -463,11 +486,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     GenresModel category = allGenresList.elementAt(index);
                     return GestureDetector(
                       onTap: () {
-                        /*       Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    MovieDetailsScreen(index)));*/
+                                builder: (context) => MovieListScreen(
+                                      category: category,
+                                    )));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -519,7 +543,8 @@ class _HomeScreenState extends State<HomeScreen> {
   static showWatchedDialog(
       {required BuildContext context,
       required String title,
-      required String description}) async {
+      required String description,
+      required Function onPositiveClick}) async {
     showDialog(
       barrierDismissible: true,
       context: context,
@@ -558,7 +583,9 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialButton(
             height: 40,
             color: Theme.of(context).backgroundColor,
-            onPressed: () async {},
+            onPressed: () async {
+              Navigator.pop(context);
+            },
             child: Text(
               'No',
               style: TextStyle(
@@ -571,7 +598,9 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialButton(
             height: 40,
             color: Theme.of(context).backgroundColor,
-            onPressed: () async {},
+            onPressed: () {
+              onPositiveClick();
+            },
             child: Text(
               'Yes',
               style: TextStyle(
@@ -607,13 +636,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontFamily:
                           Theme.of(context).textTheme.headline1!.fontFamily),
                 ),
-                Text(
-                  "See more",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 12,
-                      fontFamily:
-                          Theme.of(context).textTheme.headline1!.fontFamily),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MovieListScreen(
+                                  isLatest: true,
+                                )));
+                  },
+                  child: Text(
+                    "See more",
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                        fontSize: 12,
+                        fontFamily:
+                            Theme.of(context).textTheme.headline1!.fontFamily),
+                  ),
                 ),
               ],
             ),
@@ -631,11 +670,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     MovieModel movie = movieListLatest.elementAt(index);
                     return GestureDetector(
                       onTap: () {
-                        /* Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MovieDetailsScreen(
-                                    ResponseDataList.elementAt(index))));*/
+                                builder: (context) =>
+                                    MovieDetailsScreen(movie)));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

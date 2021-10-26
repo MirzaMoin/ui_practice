@@ -208,18 +208,21 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                                       child: MaterialButton(
                                         elevation: 0,
                                         onPressed: () async {
+                                          setState(() {
+                                            isDownload = !isDownload;
+                                          });
                                           /* await canLaunch(
                                                     "https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k")
                                                 ? await launch(
                                                     "https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k")
                                                 : throw 'Could not launch https://mega.nz/file/GwxAEIjY#wUAgU75NK55zC5ueW3MsMJflj6dom4nN5Hs29sv6Z8k';
                                           */
-                                          Navigator.push(
+                                          /* Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (_) =>
                                                       DownloadVideoScreen(
-                                                          movie.url!)));
+                                                          movie.url!)));*/
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -402,16 +405,69 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
     );
   }
 
+  final seasonList = [
+    "Season 1",
+    "Season 2",
+    "Season 3",
+    "Season 4",
+    "Season 5",
+    "Season 6",
+    "Season 7",
+    "Season 8",
+    "Season 9",
+    "Season 10",
+  ];
+  int _choiceIndex = 0;
+  bool isDownload = false;
   Widget getEpisodes(List<EpisodeModel>? episodes, int? noOfSeasons) {
     List<EpisodeModel> tmpList = [];
-    tmpList
-        .addAll(episodes!.where((element) => element.seasonNo == 1).toList());
+    tmpList.addAll(episodes!
+        .where((element) => element.seasonNo == _choiceIndex + 1)
+        .toList());
     return Container(
       color: Theme.of(context).backgroundColor,
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 60,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: false,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              itemCount: noOfSeasons,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: EdgeInsets.all(3),
+                  alignment: Alignment.center,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(20),
+                    border: new Border.all(
+                        color: Theme.of(context).accentColor, width: 2),
+                  ),
+                  child: ChoiceChip(
+                    label: Text(seasonList[index]),
+                    selected: _choiceIndex == index,
+                    selectedColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        _choiceIndex = selected ? index : 0;
+                      });
+                    },
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    elevation: 20,
+                    labelStyle: TextStyle(
+                        color: _choiceIndex == index
+                            ? Theme.of(context).accentColor
+                            : Colors.white),
+                  ),
+                );
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -428,71 +484,97 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                 itemCount: tmpList.length,
                 itemBuilder: (context, index) {
                   EpisodeModel res = tmpList.elementAt(index);
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            "${res.thumbImage}",
-                            height: 150,
-                            width: 120,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Theme.of(context).backgroundColor,
-                                      blurRadius: 100.0,
-                                      spreadRadius: 30),
-                                ],
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Theme.of(context)
-                                        .backgroundColor
-                                        .withOpacity(0.001),
-                                    Theme.of(context)
-                                        .backgroundColor
-                                        .withOpacity(0.4),
-                                    Theme.of(context)
-                                        .backgroundColor
-                                        .withOpacity(0.6),
+                  return Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                "${res.thumbImage}",
+                                height: 150,
+                                width: 120,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color:
+                                              Theme.of(context).backgroundColor,
+                                          blurRadius: 100.0,
+                                          spreadRadius: 30),
+                                    ],
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Theme.of(context)
+                                            .backgroundColor
+                                            .withOpacity(0.001),
+                                        Theme.of(context)
+                                            .backgroundColor
+                                            .withOpacity(0.4),
+                                        Theme.of(context)
+                                            .backgroundColor
+                                            .withOpacity(0.6),
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    )),
+                              ),
+                            ),
+                            Positioned(
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                bottom: 10,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Episode - ${index + 1}",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 15),
+                                    ),
+                                    Text("${res.episodeName}",
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.7),
+                                            fontSize: 13)),
                                   ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
                                 )),
-                          ),
+                          ],
                         ),
-                        Positioned(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            bottom: 10,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Episode - ${index + 1}",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15),
+                      ),
+                      isDownload
+                          ? Positioned.fill(
+                              child: Container(
+                                height: 25,
+                                width: 25,
+                                margin: EdgeInsets.all(5),
+                                color: Theme.of(context)
+                                    .backgroundColor
+                                    .withOpacity(0.7),
+                                child: Image.asset(
+                                  "assets/icons/ic_download.png",
+                                  color: Colors.white,
+                                  height: 25,
+                                  width: 25,
+                                  fit: BoxFit.fill,
                                 ),
-                                Text("${res.episodeName}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white.withOpacity(0.7),
-                                        fontSize: 13)),
-                              ],
-                            ))
-                      ],
-                    ),
+                              ),
+                            )
+                          : Container()
+                    ],
                   );
                 }),
           ),
@@ -656,11 +738,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                     MovieModel movie = tempList.elementAt(index);
                     return GestureDetector(
                       onTap: () {
-                        /*  Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    MovieDetailsScreen(index)));*/
+                                    MovieDetailsScreen(movie)));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

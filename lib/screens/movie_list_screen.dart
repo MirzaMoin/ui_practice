@@ -14,7 +14,9 @@ import 'package:ui_practice/services/http_service.dart';
 
 class MovieListScreen extends StatefulWidget {
   final GenresModel? category;
-  const MovieListScreen({this.category, Key? key}) : super(key: key);
+  final bool isLatest;
+  const MovieListScreen({this.category, Key? key, this.isLatest = false})
+      : super(key: key);
 
   @override
   _MovieListScreenState createState() => _MovieListScreenState();
@@ -28,8 +30,15 @@ class _MovieListScreenState extends State<MovieListScreen> {
   @override
   void initState() {
     super.initState();
-    getLoadedMovies();
-    loadData();
+    if (!widget.isLatest) {
+      loadData();
+    } else {
+      Future.delayed(Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
 
     /*   Future.delayed(Duration(seconds: 1), () {
       setState(() {
@@ -55,7 +64,9 @@ class _MovieListScreenState extends State<MovieListScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${widget.category!.name}",
+                    widget.isLatest
+                        ? "Latest Release"
+                        : "${widget.category!.name}",
                     style: TextStyle(
                       fontSize: 25,
                       color: Colors.white,
@@ -84,7 +95,9 @@ class _MovieListScreenState extends State<MovieListScreen> {
                   provider.categoryMovieList.addAll(movielist.toList());
                 }*/
 
-                List<MovieModel> movie = provider.categoryMovieList;
+                List<MovieModel> movie = widget.isLatest
+                    ? provider.movieListLatest
+                    : provider.categoryMovieList;
                 return isLoading
                     ? Padding(
                         padding: EdgeInsets.only(top: 10),
@@ -243,6 +256,4 @@ class _MovieListScreenState extends State<MovieListScreen> {
       print("Something went wrong");
     }
   }
-
-  void getLoadedMovies() {}
 }
