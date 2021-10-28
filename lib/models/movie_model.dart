@@ -12,6 +12,7 @@ class MovieModel {
   String? year;
   String? rating;
   String? thumbImage;
+  String? bannerImage;
   String? director;
   String? plot;
   int? isMovie;
@@ -34,6 +35,7 @@ class MovieModel {
       this.year,
       this.rating,
       this.thumbImage,
+      this.bannerImage,
       this.director,
       this.plot,
       this.isMovie,
@@ -56,6 +58,7 @@ class MovieModel {
     year = json['year'];
     rating = json['rating'];
     thumbImage = json['thumbImage'];
+    bannerImage = json['bannerImage'];
     director = json['director'];
     plot = json['plot'];
     isMovie = json['isMovie'];

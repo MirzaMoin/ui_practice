@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_practice/models/cast_model.dart';
 import 'package:ui_practice/models/episode_model.dart';
@@ -195,13 +196,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                                       decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Theme.of(context).buttonColor,
+                                              color: isDownload
+                                                  ? Colors.white
+                                                  : Theme.of(context)
+                                                      .buttonColor,
                                               blurRadius: 10,
                                               offset: Offset(1, 2),
                                             ),
                                           ],
-                                          color: Theme.of(context).buttonColor,
+                                          color: isDownload
+                                              ? Colors.white
+                                              : Theme.of(context).buttonColor,
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       margin: EdgeInsets.only(bottom: 20),
@@ -231,7 +236,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                                               "assets/icons/ic_download.png",
                                               width: 20,
                                               height: 20,
-                                              color: Colors.white,
+                                              color: isDownload
+                                                  ? Colors.red
+                                                  : Colors.white,
                                             ),
                                             SizedBox(
                                               width: 10,
@@ -239,7 +246,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                                             Text(
                                               "Download",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: isDownload
+                                                      ? Colors.red
+                                                      : Colors.white),
                                             ),
                                           ],
                                         ),
@@ -476,10 +485,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.20,
             child: ListView.builder(
                 shrinkWrap: false,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
                 scrollDirection: Axis.horizontal,
                 itemCount: tmpList.length,
                 itemBuilder: (context, index) {
@@ -557,19 +568,31 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                       ),
                       isDownload
                           ? Positioned.fill(
-                              child: Container(
-                                height: 25,
-                                width: 25,
-                                margin: EdgeInsets.all(5),
-                                color: Theme.of(context)
-                                    .backgroundColor
-                                    .withOpacity(0.7),
-                                child: Image.asset(
-                                  "assets/icons/ic_download.png",
-                                  color: Colors.white,
-                                  height: 25,
-                                  width: 25,
-                                  fit: BoxFit.fill,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("Clicked ${res.episodeName}");
+                                },
+                                child: Container(
+                                  color: Theme.of(context)
+                                      .backgroundColor
+                                      .withOpacity(0.7),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        color: Theme.of(context)
+                                            .backgroundColor
+                                            .withOpacity(0.7),
+                                        child: Image.asset(
+                                          "assets/icons/ic_download.png",
+                                          color: Colors.white,
+                                          height: 35,
+                                          width: 35,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             )

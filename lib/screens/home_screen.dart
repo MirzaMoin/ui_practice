@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget getHeader() {
     return Consumer<MovieListProvider>(builder: (context, topMovies, _) {
       return Container(
-        height: MediaQuery.of(context).size.height * 0.35,
+        height: MediaQuery.of(context).size.height * 0.30,
         child: Stack(
           children: [
             PageView.builder(
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             color: Colors.transparent,
                             child: Image.network(
-                              "${movie.thumbImage}",
+                              "${movie.bannerImage}",
                               fit: BoxFit.fill,
                             ),
                           ),
